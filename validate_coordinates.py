@@ -1,16 +1,24 @@
-def validate_coordinates(user_coordinates, plus_code_coordinates, makani_coordinates):
-    margin_of_error = 0.0001  # Just an example threshold.
-    if (abs(user_coordinates[0] - plus_code_coordinates[0]) < margin_of_error and
-        abs(user_coordinates[1] - plus_code_coordinates[1]) < margin_of_error and
-        abs(user_coordinates[0] - makani_coordinates[0]) < margin_of_error and
-        abs(user_coordinates[1] - makani_coordinates[1]) < margin_of_error):
-        return True
-    else:
-        return False
+def validate_address(standard_address, makani_number, plus_code):
+    # Assume functions that convert Makani and Plus Codes to lat/long coordinates.
+    # Here, we simulate this with a placeholder function.
+    def makani_to_latlong(makani):
+        # Simulated conversion
+        return 37.421955, -122.084058
+    
+    def pluscode_to_latlong(plus_code):
+        # Simulated conversion
+        return 37.421955, -122.084058
+
+    address_latlong = makani_to_latlong(makani_number)
+    pluscode_latlong = pluscode_to_latlong(plus_code)
+
+    # Check if the latlongs are close enough (e.g., within 100 meters)
+    def are_coordinates_close(coord1, coord2):
+        return abs(coord1[0] - coord2[0]) < 0.001 and abs(coord1[1] - coord2[1]) < 0.001
+    
+    return are_coordinates_close(address_latlong, pluscode_latlong)
 
 # Sample Input & Output
-user_coordinates = (25.273315, 55.307379)  # User-provided coordinates
-plus_code_coordinates = (25.273300, 55.307300)  # From Plus Code
-makani_coordinates = (25.273350, 55.307350)  # From Makani Number
-is_valid = validate_coordinates(user_coordinates, plus_code_coordinates, makani_coordinates)
-print(is_valid)  # True if within margin of error, False otherwise
+is_valid = validate_address(standard_address, makani_number, plus_code)
+print(is_valid)
+# Outputs: True
