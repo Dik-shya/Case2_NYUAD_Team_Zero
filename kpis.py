@@ -1,15 +1,27 @@
-def measure_kpis(deliveries):
-    # Placeholder logic for KPI calculation.
-    accuracy_rate = sum(delivery['correct'] for delivery in deliveries) / len(deliveries)
-    delivery_efficiency = sum(delivery['on_time'] for delivery in deliveries) / len(deliveries)
-    return {'accuracy_rate': accuracy_rate, 'delivery_efficiency': delivery_efficiency}
+def measure_kpis(deliveries_data):
+    # Assuming deliveries_data is a list of dictionaries with delivery accuracy and on-time status
+    total_deliveries = len(deliveries_data)
+    accurate_deliveries = sum(1 for delivery in deliveries_data if delivery['is_accurate'])
+    on_time_deliveries = sum(1 for delivery in deliveries_data if delivery['is_on_time'])
+    
+    accuracy_rate = accurate_deliveries / total_deliveries
+    on_time_rate = on_time_deliveries / total_deliveries
+    
+    kpis = {
+        'accuracy_rate': accuracy_rate,
+        'on_time_rate': on_time_rate
+    }
+    return kpis
 
-# Sample Input & Output
-deliveries = [
-    {'correct': True, 'on_time': True},
-    {'correct': True, 'on_time': False},
-    {'correct': False, 'on_time': True},
-    # ... many more deliveries ...
+# Sample Input
+deliveries_data = [
+    {'is_accurate': True, 'is_on_time': True},
+    {'is_accurate': False, 'is_on_time': True},
+    {'is_accurate': True, 'is_on_time': False},
+    # ... more delivery data ...
 ]
-kpis = measure_kpis(deliveries)
-print(kpis)  # e.g., {'accuracy_rate': 0.66, 'delivery_efficiency': 0.66}
+
+# Sample Output
+kpis = measure_kpis(deliveries_data)
+print(kpis)
+# Outputs: {'accuracy_rate': 0.66, 'on_time_rate': 0.66}
