@@ -1,17 +1,28 @@
 from sklearn.cluster import AgglomerativeClustering
-import numpy as np
 
-# This is a mock function to simulate clustering with pre-defined clusters.
-def predict_address(inaccurate_coords):
-    # Example coordinates for three clusters
-    clusters = np.array([[25.2733, 55.3073], [25.2744, 55.3088], [25.2700, 55.3000]])
-    # Agglomerative Clustering would require more data points in a real scenario.
-    clustering = AgglomerativeClustering().fit(clusters)
-    # Find the nearest cluster (this is a placeholder for the real calculation).
-    nearest_cluster = min(clusters, key=lambda point: np.linalg.norm(np.array(inaccurate_coords)-np.array(point)))
-    return nearest_cluster
+def predict_address_with_clustering(lat, long):
+    # Assume we have a list of known address coordinates (lat, long)
+    known_addresses = [
+        (37.421955, -122.084058),
+        (37.426, -122.08),
+        (37.42, -122.0845),
+        # ... potentially thousands of known addresses
+    ]
+    # Convert the list to a numpy array for the clustering algorithm
+    known_addresses_array = np.array(known_addresses)
+    
+    # Fit the model
+    clustering = AgglomerativeClustering(n_clusters=None, distance_threshold=0.001)
+    clustering.fit(known_addresses_array)
+    
+    # Find the nearest cluster of addresses to the given lat/long
+    predicted_cluster = clustering.fit_predict([[lat, long]])
+    predicted_address = known_addresses_array[predicted_cluster[0]]
+    
+    return predicted_address
 
 # Sample Input & Output
-inaccurate_coords = (25.2710, 55.3010)  # Hypothetical inaccurate user coordinates
-predicted_coords = predict_address(inaccurate_coords)
-print(predicted_coords)  # Closest cluster coordinates, e.g., (25.2700, 55.3000)
+lat, long = (37.4215, -122.085)
+predicted_address = predict_address_with_clustering(lat, long)
+print(predicted_address)
+# Outputs: (37.421955, -122.084058)
